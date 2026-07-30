@@ -1,7 +1,7 @@
 // ============== 饭团成长日记 · Service Worker（网络优先 + 离线兜底） ==============
 // 策略：联网时永远拉取最新文件（保证每天内容/代码更新生效），
 //       断网或服务器不可达时回退到上次缓存（app 不白屏，已看内容照常使用）。
-const CACHE = "yitiantuan-v36";
+const CACHE = "yitiantuan-v37";
 const PRECACHE = [
   "./", "index.html", "style.css", "app.js", "manifest.json",
   "assets/icon-192.png", "assets/icon-512.png", "assets/icon-maskable-512.png"
