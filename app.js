@@ -1,5 +1,5 @@
 // ================= Yiiovo 的成长日记 · 核心逻辑 =================
-const APP_VER="v20260730r"; // 手机端版本水印：改版时务必同步此值，便于确认是否刷到新版
+const APP_VER="v20260730s"; // 手机端版本水印：改版时务必同步此值，便于确认是否刷到新版
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const todayStr=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
 const dayIndex=off=>Math.floor(Date.now()/86400000)-(off||0);
@@ -955,135 +955,6 @@ window.renderTed=renderTed;
 
 
 /* ============ 变美·护肤品拍照分析 ============ */
-const SK_GENTLE=["芙丽芳丝","珂润","至本","薇诺娜","cerave","适乐肤","丝塔芙","雅漾","理肤泉","薇姿","启初","悦木之源","珂莱丽尔","雅诗兰黛小棕瓶(慎)","海蓝之谜(慎)","fresh","黛珂","怡丽丝尔","芙丽芳丝化妆水","IPSA","芳珂","fancl"];
-const SK_HARD=["水杨酸","果酸","A 醇","A醇","视黄醇","retinol","377","苯甲酰","壬二酸","高浓度 VC","左旋 C","烟酰胺","磨砂","撕拉","清洁面膜","黑炭","冻干粉","377精华","a酸","果酸身体乳"];
-const SK_BASIC_TAG={"洁面":"洁面","洗面奶":"洁面","卸妆":"卸妆","化妆水":"水","爽肤水":"水","水乳":"水","精华水":"水","精华":"精华","肌底液":"精华","面霜":"面霜","乳液":"乳液","防晒":"防晒","霜":"面霜","喷雾":"喷雾","面膜":"面膜","眼霜":"眼霜"};
-function skClassifyItem(name){
-  for(const k in SK_BASIC_TAG){
-    if(name.includes(k))return SK_BASIC_TAG[k];
-  }
-  return "其他";
-}
-function skAnalyze(){
-  const res=$("#sk-result");
-  if(!res)return;
-  if(!$("#sk-list").value.trim()){
-    res.innerHTML='<div class="sk-warn">先写一下你有哪些护肤品（至少写一行）</div>';
-    res.scrollIntoView({behavior:"smooth",block:"center"});
-    return;
-  }
-  res.innerHTML='<div class="sk-warn">🔍 正在分析你的护肤阵容…</div>';
-  // 先让 loading 渲染出来，再做（避免大段渲染卡住像“没反应”）
-  setTimeout(()=>{
-    try{
-      const listRaw=$("#sk-list").value.trim();
-      const items=listRaw.split(/[\n,,;;、\s]+/).map(s=>s.trim()).filter(s=>s.length>1);
-      const concerns=$$(".sk-concern:checked").map(c=>c.value);
-      const bp=getBeautyProfile();
-      // 分类
-      const buckets={};items.forEach(n=>{const t=skClassifyItem(n);(buckets[t]=buckets[t]||[]).push(n);});
-      // 检测猛药
-      const hardHits=items.filter(n=>SK_HARD.some(h=>n.toLowerCase().includes(h.toLowerCase())));
-      // 检测温和
-      const gentleHits=items.filter(n=>SK_GENTLE.some(g=>n.toLowerCase().includes(g.toLowerCase())));
-      // 缺失关键步骤
-      const missing=[];["洁面","水","面霜","防晒"].forEach(k=>{if(!Object.keys(buckets).some(x=>x.includes(k)))missing.push(k);});
-      // 输出
-      let html='<div class="sk-block"><b>📋 你的现有产品（按类型）</b>';
-      for(const k of Object.keys(buckets)){
-        html+='<div class="sk-line"><span class="sk-tag">'+k+'</span> '+buckets[k].map(esc).join('、')+'</div>';
-      }
-      html+='</div>';
-      // 保留建议
-      html+='<div class="sk-block"><b>✅ 可以保留（温和不致痘优先）</b><div class="sk-line">';
-      if(gentleHits.length){
-        html+=gentleHits.map(esc).join('、')+' —— 都是经典温和、不致痘款，适合你「'+esc(bp.skinType)+'」肤质，可以放心继续用。';
-      }else{
-        html+='没检测到明确的温和派品牌。建议你补一个珂润 / 薇诺娜 / 至本 / 适乐肤 类作为"安全牌"。';
-      }
-      html+='</div></div>';
-      // 警惕
-      html+='<div class="sk-block"><b>⚠️ 谨慎使用 / 减频</b><div class="sk-line">';
-      if(hardHits.length){
-        html+=hardHits.map(esc).join('、')+' —— 你当前档案为「'+esc(bp.barrier)+'」，这类<b>猛药</b>建议：<br>① 减频到每周 1-2 次 ② T 区出油区可正常用，避开泛红/敏感区 ③ 与神经酰胺面霜同用修护。';
-      }else{
-        html+='没检测到猛药成分，敏感肌状态更稳啦 👍';
-      }
-      html+='</div></div>';
-      // 缺失补充
-      html+='<div class="sk-block"><b>➕ 建议补充（按你关心的问题）</b><div class="sk-line">';
-      const sug=[];
-      if(missing.includes("洁面"))sug.push('<b>洁面</b>：芙丽芳丝 / 至本舒颜 / 珂润泡沫洁面，氨基酸表活，敏感肌标配');
-      if(missing.includes("防晒"))sug.push('<b>防晒</b>：薇诺娜清透防晒乳 / 怡丽丝尔金管，混油皮选轻薄不闷痘款，防痘印加深');
-      if(missing.includes("面霜"))sug.push('<b>面霜</b>：适乐肤 C 霜 / 珂润润浸保湿面霜，含神经酰胺修护屏障');
-      if(missing.includes("水"))sug.push('<b>水</b>：至本舒颜修护水 / 薇诺娜舒敏保湿润肤水');
-      // 按困扰
-      if(concerns.includes("闭口粉刺")||concerns.includes("下巴小疙瘩")){
-        sug.push('<b>局部闭口</b>：stridex 0.5% 棉片 / 博乐达 2% 水杨酸，每周 2 次点涂下巴+额头闭口');
-      }
-      if(concerns.includes("两颊泛红")){
-        sug.push('<b>泛红急救</b>：可复美胶原棒 / 薇诺娜舒敏霜，泛红严重时局部湿敷');
-      }
-      if(concerns.includes("炎性痘痘")){
-        sug.push('<b>炎性痘</b>：点涂过氧化苯甲酰(BPO) 2.5% 或壬二酸，切忌手挤；与闭口区的低浓度水杨酸分区使用');
-      }
-      if(concerns.includes("陈旧痘印")){
-        sug.push('<b>陈旧痘印</b>：褐色印用含烟酰胺 / 传明酸精华淡化；红色印可低浓度壬二酸；严格防晒防加深');
-      }
-      if(concerns.includes("毛孔粗大")){
-        sug.push('<b>毛孔</b>：混油皮做好「T 区控油 + 两颊保湿」，毛孔视觉更干净；不建议强清洁或撕拉，会加重出油和闭口');
-      }
-      if(concerns.includes("鼻子黑头")){
-        sug.push('<b>黑头</b>：一周 1 次霍霍巴油按摩 + 氨基酸洁面，以溶代挤；T 区可低浓度水杨酸棉片');
-      }
-      if(concerns.includes("孕/哺乳期")){
-        sug.push('<b>孕/哺乳期</b>：停水杨酸 / 视黄醇 / 377；用基础保湿+物理防晒即可');
-      }
-      html+=sug.length?sug.map(s=>'· '+s).join('<br>'):'你现有的配置已经比较完整，继续保持。';
-      html+='</div></div>';
-      // 早晚顺序
-      html+='<div class="sk-block"><b>🌅🌙 建议使用顺序</b>';
-      html+='<div class="sk-line"><b>早：</b>洁面（可清水）→ 化妆水 → 精华 → 面霜 → 防晒</div>';
-      html+='<div class="sk-line"><b>晚：</b>卸妆（用了防晒就要）→ 洁面 → 化妆水 → 精华（避开猛药区）→ 面霜 → 局部水杨酸（仅闭口）</div>';
-      html+='<div class="sk-line">⚠️ 重点：泛红/敏感区不要叠加猛药和酸；T 区出油偏多可重点控油，两颊偏干只薄涂保湿；涂护肤品从 T 区开始，最后到两颊。';
-      html+='</div></div>';
-      res.innerHTML=html;
-      res.scrollIntoView({behavior:"smooth",block:"center"});
-      // 保存历史
-      const photo=$("#sk-photo-preview").src||"";
-      const hist=LS.get("yi_sk_history",[]);
-      hist.unshift({ts:Date.now(),list:items,concerns,photo,result:html});
-      if(hist.length>10)hist.length=10;
-      LS.set("yi_sk_history",hist);
-      renderSkHistory();
-    }catch(err){
-      res.innerHTML='<div class="sk-warn">分析出错了：'+esc(err&&err.message||String(err))+'<br>请刷新页面重试。</div>';
-      res.scrollIntoView({behavior:"smooth",block:"center"});
-    }
-  },30);
-}
-function renderSkHistory(){
-  const hist=LS.get("yi_sk_history",[]);
-  const el=$("#sk-history"); if(!el)return;
-  if(!hist.length){el.innerHTML='';return;}
-  el.innerHTML='<div class="sk-h-title">📂 历史分析（最近 '+hist.length+' 条）</div>'+hist.map(h=>
-    '<div class="sk-h-item">'+
-      (h.photo?'<img class="diet-thumb" src="'+h.photo+'">':'')+
-      '<div class="sk-h-meta"><b>'+new Date(h.ts).toLocaleString()+'</b><br>'+
-      '<span class="sk-tag">'+h.list.slice(0,4).join('、')+(h.list.length>4?'…':'')+'</span></div>'+
-      '<div class="sk-h-result">'+h.result.slice(0,180)+'…</div></div>'
-  ).join("");
-}
-function skBind(){
-  if($("#sk-photo"))$("#sk-photo").addEventListener("change",async e=>{
-    const f=e.target.files[0];if(!f)return;e.target.value="";
-    const du=await pickPhoto(f);
-    if(du){$("#sk-photo-preview").src=du;$("#sk-photo-preview").classList.remove("hidden");}
-  });
-  if($("#sk-analyze-btn"))$("#sk-analyze-btn").onclick=skAnalyze;
-  renderSkHistory();
-}
-skBind();
 
 /* ============ 专属档案（可编辑，驱动护肤建议） ============ */
 function getBeautyProfile(){
@@ -1108,9 +979,6 @@ function renderBeautyArchive(){
     ' —— 穿搭/塑形主攻<b>遮胯不遮腰 + 收腹核心训练</b>，'+esc(p.note)+'。'+
     '<button class="archive-edit" id="archive-edit">✏️ 编辑</button>';
   const btn=$("#archive-edit"); if(btn)btn.onclick=openArchiveEditor;
-}
-function syncSkConcerns(concerns){
-  $$(".sk-concern").forEach(c=>{ c.checked=concerns.includes(c.value); });
 }
 function openArchiveEditor(){
   const p=getBeautyProfile();
@@ -1141,7 +1009,6 @@ function closeArchiveEditor(){ const m=$("#beauty-archive-modal"); if(m)m.classL
       };
       setBeautyProfile(p);
       renderBeautyArchive();
-      syncSkConcerns(p.concerns);
       closeArchiveEditor();
       toast("💗 专属档案已更新，护肤建议已按新状态刷新");
     };
@@ -1159,124 +1026,6 @@ function toast(msg){
   t._timer=setTimeout(()=>t.classList.remove("show"),2200);
 }
 
-/* ============ 变美·化妆品拍照分析 ============ */
-let curLook="日常通勤";
-const LOOK_PLAN={
- "日常通勤":{
-   steps:["妆前乳（保湿型）","粉底液（轻薄持妆）","遮瑕（局部）","散粉（局部定妆 T 区）","眉粉","睫毛膏","豆沙/奶茶唇釉","（可选）浅色腮红"],
-   tips:"① 用气垫代替粉底液更服帖 ② 眉毛自然野生感，不画粗平眉 ③ 唇色选玫瑰豆沙/奶茶最稳妥 ④ 通勤妆最忌浓睫毛膏苍蝇腿，纤长型即可。",
-   skinTips:"混合偏油皮选「保湿控油型妆前乳 + 轻薄持妆粉底」；T区易出油先薄涂控油妆前；鼻翼易卡粉用粉扑拍开"
- },
- "约会淡妆":{
-   steps:["隔离（提亮）","气垫/粉底液","遮瑕黑眼圈","眼影（浅粉/蜜桃）","内眼线 + 睫毛膏","腮红（苹果肌）","唇釉（蜜桃/玫瑰）","（可选）高光颧骨"],
-   tips:"① 眼妆重点是卧蚕和睫毛，不画粗眼线 ② 腮红横扫苹果肌中心显可爱 ③ 唇釉用指腹晕开更自然。",
-   skinTips:"敏感肌避免含酒精定妆喷雾；用粉状腮红更友好；约会前做好唇膜避免唇纹明显"
- },
- "面试气质":{
-   steps:["妆前乳","粉底液（哑光持久）","遮瑕","眉笔（自然）","极细内眼线","睫毛膏","裸色/豆沙唇","（避免）浓眼影/亮片"],
-   tips:"① 面试忌浓妆，显精神即可 ② 眉毛干净、眉峰不锐利 ③ 唇色最稳：玫瑰豆沙；不要用正红/橘红 ④ 散粉定妆防止出油脱妆。",
-   skinTips:"敏感肌避免含水杨酸妆前；控油用散粉优于吸油纸；T 区出油处按压式补妆"
- },
- "伪素颜":{
-   steps:["润唇膏","隔离（提亮）","气垫（少量多次）","眉粉","睫毛膏（少量）","唇釉（浅色）","（可选）素颜霜/有色面霜"],
-   tips:"① 重点是均匀肤色 + 唇色，不要画眼影 ② 眉毛用眉粉梳顺即可 ③ 睫毛膏只刷一层，避免结块 ④ 唇色选与自己唇色相近的 MLBB 色。",
-   skinTips:"混合偏油皮伪素颜最忌卡粉；用气垫少量多次拍开；T区出油处按压定妆；鼻翼用粉扑按压"
- },
- "中式新中式":{
-   steps:["妆前乳","粉底液（奶油肌）","遮瑕","眉笔（远山眉/柳叶眉）","眼影（大地色+一点点红）","内眼线 + 睫毛","腮红（斜扫）","唇釉（枫叶红/中国红）"],
-   tips:"① 眉毛是关键：远山眉或柳叶眉，不画一字眉 ② 眼影加一点点朱红/砖红色显气色 ③ 唇色选枫叶红/砖红/中国红，配黑发最有味道。",
-   skinTips:"敏感肌避免亮片眼影；腮红斜扫到太阳穴修饰脸型；唇色饱和度高的口红需先涂润唇膏"
- },
- "晚宴/约会":{
-   steps:["妆前乳（保湿）","粉底液（持妆）","遮瑕","修容（颧骨/鼻影）","眼影（大地色+酒红）","眼线（猫眼/上扬）","睫毛膏+假睫毛（可选）","腮红","唇釉（玫瑰/酒红）","高光"],
-   tips:"① 眼妆是重点：大地色打底 + 酒红加深眼尾 ② 眼线从眼尾 1/3 上扬 ③ 唇色与眼影呼应：玫瑰/酒红 ④ 高光打在颧骨、鼻梁、唇峰。",
-   skinTips:"敏感肌上妆前冰敷收缩红血丝；高光选细腻型避免显毛孔；定妆喷雾锁妆"
- },
- "夏日清透":{
-   steps:["控油妆前乳","持妆粉底液","遮瑕","眉粉","眼影（橘棕/西柚）","睫毛膏","腮红（橘色系）","唇釉（西柚/水红）","（可选）透明定妆喷雾"],
-   tips:"① 控油妆前乳是关键，T 区不出油 ② 眼影橘棕/西柚显夏日清新 ③ 唇色选水红/西柚，不用正红 ④ 散粉重点定 T 区。",
-   skinTips:"混合偏油皮夏日选「控油保湿」妆前乳；防水睫毛膏防汗；唇釉选水润不拔干型"
- }
-};
-function mkAnalyze(){
-  const listRaw=$("#mk-list").value.trim();
-  const look=curLook;
-  const plan=LOOK_PLAN[look];
-  // 检测用户是否提了某些产品
-  const items=listRaw?listRaw.split(/[\n,,;;、\s]+/).map(s=>s.trim()).filter(s=>s.length>1):[];
-  const haveItems=items.length;
-  let html='<div class="sk-block"><b>🎯 目标妆容：'+look+'</b><div class="sk-line">根据你现有的化妆品 + '+look+' 的搭配惯例，给出专属组合。</div></div>';
-  if(haveItems){
-    html+='<div class="sk-block"><b>🧰 你现有的化妆品（'+items.length+' 件）</b><div class="sk-line">'+items.map(esc).join('、')+'</div></div>';
-    // 关键词命中提示
-    const found={"妆前乳/隔离":[],"粉底":[],"遮瑕":[],"眼影":[],"眼线":[],"睫毛膏":[],"腮红":[],"唇釉/口红":[],"散粉/定妆":[],"眉粉/眉笔":[]};
-    items.forEach(n=>{
-      const lower=n.toLowerCase();
-      if(lower.includes("隔离")||lower.includes("妆前"))found["妆前乳/隔离"].push(n);
-      if(lower.includes("粉底")||lower.includes("气垫")||lower.includes("bb"))found["粉底"].push(n);
-      if(lower.includes("遮瑕"))found["遮瑕"].push(n);
-      if(lower.includes("眼影"))found["眼影"].push(n);
-      if(lower.includes("眼线"))found["眼线"].push(n);
-      if(lower.includes("睫毛"))found["睫毛膏"].push(n);
-      if(lower.includes("腮红"))found["腮红"].push(n);
-      if(lower.includes("唇釉")||lower.includes("口红")||lower.includes("唇泥"))found["唇釉/口红"].push(n);
-      if(lower.includes("散粉")||lower.includes("定妆")||lower.includes("粉饼"))found["散粉/定妆"].push(n);
-      if(lower.includes("眉"))found["眉粉/眉笔"].push(n);
-    });
-    const missing=Object.keys(found).filter(k=>!found[k].length);
-    html+='<div class="sk-block"><b>✅ 能直接搭配出的产品</b><div class="sk-line">';
-    html+=Object.keys(found).filter(k=>found[k].length).map(k=>'<span class="sk-tag">'+k+'</span> '+found[k].join('、')).join(' · ');
-    html+='</div></div>';
-    if(missing.length){
-      html+='<div class="sk-block"><b>⚠️ 还缺这些基础单品（按预算选 1 件即可）</b><div class="sk-line">';
-      const tips={"妆前乳/隔离":"干皮选保湿型（怡丽丝尔金管），油皮选控油型（苏菲娜）","粉底":"气垫最易上手（雪花秀/珂莱蒂尔）；粉底液 DW/NARS 持妆好","遮瑕":"彩棠三色遮瑕或橘朵三色","眼影":"橘朵七色 / 完美日记动物盘最平价","眼线":"KissMe 眼线笔，防水不晕","睫毛膏":"KissMe 纤长 / 艾杜纱睫毛打底","腮红":"橘朵单色 / NARS 高潮","唇釉/口红":"Colorkey 空气唇釉 / 完美日记名片唇釉平价好用","散粉/定妆":"RCMA 散粉平价大碗 / NARS 裸光蜜粉","眉粉/眉笔":"Kate 三色眉粉 / 橘朵眉笔"};
-      html+=missing.map(m=>'· <b>'+m+'</b>：'+tips[m]).join('<br>');
-      html+='</div></div>';
-    }
-  }else{
-    html+='<div class="sk-block"><b>💡 没写你现有的化妆品？</b><div class="sk-line">在上面框里写下你有什么（比如「CPB 隔离、雅诗兰黛 DW、3CE 口红」），我帮你筛选哪些该用，再列出还缺什么。</div></div>';
-  }
-  html+='<div class="sk-block"><b>🎬 上妆顺序（'+look+'）</b><div class="sk-line">'+plan.steps.map((s,i)=>(i+1)+'. '+s).join(' → ')+'</div></div>';
-  html+='<div class="sk-block"><b>💡 '+look+' 妆容小心机</b><div class="sk-line">'+plan.tips+'</div></div>';
-  html+='<div class="sk-block"><b>🌸 针对混合偏油皮（你的档案）</b><div class="sk-line">'+plan.skinTips+'</div></div>';
-  $("#mk-result").innerHTML=html;
-  const photo=$("#mk-photo-preview").src||"";
-  const hist=LS.get("yi_mk_history",[]);
-  hist.unshift({ts:Date.now(),look,items,photo,result:html});
-  if(hist.length>10)hist.length=10;
-  LS.set("yi_mk_history",hist);
-  renderMkHistory();
-}
-function renderMkHistory(){
-  const hist=LS.get("yi_mk_history",[]);
-  const el=$("#mk-history"); if(!el)return;
-  if(!hist.length){el.innerHTML='';return;}
-  el.innerHTML='<div class="sk-h-title">📂 历史妆容（最近 '+hist.length+' 条）</div>'+hist.map(h=>
-    '<div class="sk-h-item">'+
-      (h.photo?'<img class="diet-thumb" src="'+h.photo+'">':'')+
-      '<div class="sk-h-meta"><b>'+h.look+'</b> · '+new Date(h.ts).toLocaleString()+'<br>'+
-      '<span class="sk-tag">'+h.items.slice(0,3).join('、')+(h.items.length>3?'…':'')+'</span></div>'+
-      '<div class="sk-h-result">'+h.result.slice(0,180)+'…</div></div>'
-  ).join("");
-}
-function mkBind(){
-  if($("#mk-photo"))$("#mk-photo").addEventListener("change",async e=>{
-    const f=e.target.files[0];if(!f)return;e.target.value="";
-    const du=await pickPhoto(f);
-    if(du){$("#mk-photo-preview").src=du;$("#mk-photo-preview").classList.remove("hidden");}
-  });
-  if($("#mk-analyze-btn"))$("#mk-analyze-btn").onclick=mkAnalyze;
-  if($("#mk-look-row")){
-    $("#mk-look-row").addEventListener("click",e=>{
-      if(!e.target.classList.contains("chip"))return;
-      $("#mk-look-row").querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
-      e.target.classList.add("active");
-      curLook=e.target.dataset.look;
-    });
-  }
-  renderMkHistory();
-}
-mkBind();
 
 /* ============ 知识拓展 / 变美护肤（通用渲染） ============ */
 function makeFilterList(filterBarId,listId,bank,n,catKey,module){
@@ -1850,57 +1599,6 @@ function renderAnalysisHTML(ana){
 }
 
 /* ============ 图片智能压缩（解决手机照片>4MB、localStorage 撑爆问题） ============ */
-/* 不限制原图大小：读取后用 canvas 缩放到最长边 maxDim，导出 JPEG q，
-   存进 localStorage 的 base64 通常只有 100~300KB，且画质足够辨认食物。 */
-function compressImage(file, maxDim, q){
-  return new Promise((resolve,reject)=>{
-    const fr=new FileReader();
-    fr.onerror=()=>reject(new Error("read fail"));
-    fr.onload=()=>{
-      const img=new Image();
-      img.onerror=()=>reject(new Error("decode fail"));
-      img.onload=()=>{
-        const ow=img.naturalWidth||img.width, oh=img.naturalHeight||img.height;
-        if(!ow||!oh){ reject(new Error("bad image")); return; }
-        const MAXKB=250; // 单张上限 ~250KB，避免占用过大
-        const encode=(dim,quality)=>{
-          let w=ow,h=oh;
-          if(w>dim||h>dim){ const s=Math.min(dim/w,dim/h); w=Math.max(1,Math.round(w*s)); h=Math.max(1,Math.round(h*s)); }
-          const cv=document.createElement("canvas"); cv.width=w; cv.height=h;
-          const cx=cv.getContext("2d"); cx.fillStyle="#fff"; cx.fillRect(0,0,w,h); // PNG 透明转白底
-          cx.drawImage(img,0,0,w,h);
-          return cv.toDataURL("image/jpeg",quality);
-        };
-        let dim=maxDim, quality=q, data=encode(dim,quality), guard=0;
-        while(data.length*0.75>MAXKB*1024 && guard<8){
-          guard++;
-          if(quality>0.45){ quality=Math.max(0.45,quality-0.12); }
-          else { dim=Math.max(420,Math.round(dim*0.78)); quality=0.6; }
-          data=encode(dim,quality);
-        }
-        resolve(data);
-      };
-      img.src=fr.result;
-    };
-    fr.readAsDataURL(file);
-  });
-}
-/* 统一处理选择的照片：先压缩，失败则兜底直接读原图；返回 dataURL */
-async function pickPhoto(file){
-  if(!file) return "";
-  if(typeof toast==="function") toast("📷 正在压缩照片…");
-  try{
-    return await compressImage(file,1280,0.8);
-  }catch(e){
-    // 兜底：直接读原图（极端情况才走到）
-    return await new Promise((res)=>{
-      const r=new FileReader();
-      r.onload=()=>res(r.result);
-      r.onerror=()=>res("");
-      r.readAsDataURL(file);
-    });
-  }
-}
 
 /* ============ 拍照+选食物弹窗 (dm = diet modal) ============ */
 let dmSelected=null,dmMultiplier=1;
@@ -2608,7 +2306,6 @@ function init(){
   makeFilterList("#know-filter","#knowledge-list",DB.knowledge,50,"c","knowledge");
   makeFilterList("#beauty-filter","#beauty-list",DB.beauty,40,"c","beauty");
   renderBeautyArchive();
-  syncSkConcerns(getBeautyProfile().concerns);
   // 变美护肤三个板块 tab 切换
   const btBar=$("#beauty-tabs");
   if(btBar && !btBar.dataset.bound){
@@ -2618,7 +2315,7 @@ function init(){
       btBar.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));e.target.classList.add("active");
       const t=e.target.dataset.bt;
       $$(".bt-panel").forEach(p=>p.classList.add("hidden"));
-      const map={know:"bt-know",sk:"bt-sk",mk:"bt-mk"};
+      const map={know:"bt-know"};
       const el=document.getElementById(map[t]);if(el)el.classList.remove("hidden");
     });
   }
