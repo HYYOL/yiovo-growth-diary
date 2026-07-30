@@ -12,12 +12,12 @@
 <meta name="apple-mobile-web-app-title" content="Yiiovo 的成长日记">
 <title>Yiiovo 的成长日记 🗓</title>
 <!-- JS 启动前先强制跳到带版本号的 URL，破华为浏览器 HTTP 缓存 -->
-<script>if(!location.search.match(/[?&]v=/))location.replace("./?v=20260730r&_t="+Date.now());</script>
-<link rel="manifest" href="manifest.json?v=20260730r">
+<script>if(!location.search.match(/[?&]v=/))location.replace("./?v=20260730s&_t="+Date.now());</script>
+<link rel="manifest" href="manifest.json?v=20260730s">
 <link rel="icon" type="image/png" href="assets/icon-192.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <base href="./">
-<link rel="stylesheet" href="style.css?v=20260730r">
+<link rel="stylesheet" href="style.css?v=20260730s">
 </head>
 <body>
 <div class="app">
@@ -335,8 +335,6 @@
       <div class="card note-card pink" id="beauty-archive"></div>
       <div class="filter-row beauty-tabs" id="beauty-tabs">
         <button class="chip active" data-bt="know">📚 变美护肤知识</button>
-        <button class="chip" data-bt="sk">🧴 护肤品搭配建议</button>
-        <button class="chip" data-bt="mk">💄 化妆品组合建议</button>
       </div>
       <div class="bt-panel" id="bt-know">
       <div class="filter-row" id="beauty-filter">
@@ -353,65 +351,7 @@
       <div id="beauty-list"></div>
       </div><!-- /bt-know -->
 
-      <!-- 拍照分析护肤品 -->
-      <div class="bt-panel hidden" id="bt-sk">
-      <div class="card sk-tool">
-        <div class="card-title">📸 拍照分析我现有的护肤品 · 搭配建议</div>
-        <div class="sleep-tip" style="margin-top:0">把你的护肤品（洁面 / 水 / 精华 / 面霜 / 防晒 等）拍照上传，下面写下产品名称 + 你的皮肤困扰，我根据<b>你上方「💗 专属档案」（点 ✏️ 可随时更新皮肤状态）</b>给出 ① 哪些可以保留 ② 哪些该停掉 ③ 推荐补充什么 ④ 早晚使用顺序（按你最新档案的肤质与屏障状态定制）。</div>
-        <div class="sk-up-row">
-          <label class="diet-upload sk-upload">
-            <input type="file" id="sk-photo" accept="image/*" hidden>
-            <div class="du-ico">📷</div>
-            <div class="du-txt">上传护肤品照片</div>
-          </label>
-          <img id="sk-photo-preview" class="diet-photo-preview hidden" alt="护肤品照片">
-        </div>
-        <textarea id="sk-list" rows="3" placeholder="例如：芙丽芳丝洗面奶、SK-II 神仙水、雅诗兰黛小棕瓶、珂润面霜、安耐晒金瓶…（一行写一个，或写品牌+功效）"></textarea>
-        <div class="sk-concern-row">
-          <label><input type="checkbox" class="sk-concern" value="两颊泛红"> 两颊泛红</label>
-          <label><input type="checkbox" class="sk-concern" value="闭口粉刺" checked> 闭口粉刺</label>
-          <label><input type="checkbox" class="sk-concern" value="毛孔粗大" checked> 毛孔粗大</label>
-          <label><input type="checkbox" class="sk-concern" value="鼻子黑头" checked> 鼻子黑头</label>
-          <label><input type="checkbox" class="sk-concern" value="下巴小疙瘩" checked> 下巴小疙瘩</label>
-          <label><input type="checkbox" class="sk-concern" value="炎性痘痘"> 炎性痘痘</label>
-          <label><input type="checkbox" class="sk-concern" value="陈旧痘印"> 陈旧痘印</label>
-          <label><input type="checkbox" class="sk-concern" value="孕/哺乳期"> 孕/哺乳期</label>
-        </div>
-        <button class="btn-main" id="sk-analyze-btn">🔍 根据我的档案给出搭配方案</button>
-        <div id="sk-result" class="sk-result"></div>
-        <div id="sk-history" class="sk-history"></div>
-      </div>
-      </div><!-- /bt-sk -->
-
-      <!-- 拍照分析化妆品·妆容组合 -->
-      <div class="bt-panel hidden" id="bt-mk">
-      <div class="card sk-tool">
-        <div class="card-title">💄 拍照我的化妆品 · 妆容组合</div>
-        <div class="sleep-tip" style="margin-top:0">把你现有的化妆品拍照上传，写下产品名 + 想要的妆容场景，我帮你 ① 选出要用的产品组合 ② 上妆顺序 ③ 适合你肤质的小心机。</div>
-        <div class="sk-up-row">
-          <label class="diet-upload sk-upload">
-            <input type="file" id="mk-photo" accept="image/*" hidden>
-            <div class="du-ico">💄</div>
-            <div class="du-txt">上传化妆品照片</div>
-          </label>
-          <img id="mk-photo-preview" class="diet-photo-preview hidden" alt="化妆品照片">
-        </div>
-        <textarea id="mk-list" rows="3" placeholder="例如：CPB 长管隔离、雅诗兰黛 DW 粉底液、nars 腮红、3CE 口红…"></textarea>
-        <div class="filter-row" id="mk-look-row">
-          <button class="chip active" data-look="日常通勤">💼 日常通勤</button>
-          <button class="chip" data-look="约会淡妆">💗 约会淡妆</button>
-          <button class="chip" data-look="面试气质">🎓 面试气质</button>
-          <button class="chip" data-look="伪素颜">🤍 伪素颜</button>
-          <button class="chip" data-look="中式新中式">🏮 中式新中式</button>
-          <button class="chip" data-look="晚宴/约会">🌙 晚宴/约会</button>
-          <button class="chip" data-look="夏日清透">☀️ 夏日清透</button>
-        </div>
-        <button class="btn-main" id="mk-analyze-btn">✨ 帮我组合妆容</button>
-        <div id="mk-result" class="sk-result"></div>
-        <div id="mk-history" class="sk-history"></div>
-      </div>
-      </div><!-- /bt-mk -->
-    </section>
+          </section>
 
     <!-- ============ AI 创作 ============ -->
     <section class="page" id="page-ai">
@@ -931,26 +871,26 @@ create policy "anon_all" on public.yi_sync for all to anon
   </div>
 
 </div>
-<script src="data.js?v=20260730r"></script>
-<script src="data-baoyan.js?v=20260730r"></script>
-<script src="data-bridge.js?v=20260730r"></script>
-<script src="data-bridge2.js?v=20260730r"></script>
-<script src="data-words.js?v=20260730r"></script>
-<script src="data-words2.js?v=20260730r"></script>
-<script src="data-read.js?v=20260730r"></script>
-<script src="data-know.js?v=20260730r"></script>
-<script src="data-beauty-skin.js?v=20260730r"></script>
-<script src="data-ai.js?v=20260730r"></script>
-<script src="data-illus.js?v=20260730r"></script>
-<script src="data-review.js?v=20260730r"></script>
-<script src="data-paper.js?v=20260730r"></script>
-<script src="data-news.js?v=20260730r"></script>
-<script src="data-diet.js?v=20260730r"></script>
-<script src="data-trans.js?v=20260730r"></script>
-<script src="data-ted.js?v=20260730r"></script>
-<script src="data-bridge-adv.js?v=20260730r"></script>
-<script src="app.js?v=20260730r"></script>
-<script src="sync.js?v=20260730r"></script>
+<script src="data.js?v=20260730s"></script>
+<script src="data-baoyan.js?v=20260730s"></script>
+<script src="data-bridge.js?v=20260730s"></script>
+<script src="data-bridge2.js?v=20260730s"></script>
+<script src="data-words.js?v=20260730s"></script>
+<script src="data-words2.js?v=20260730s"></script>
+<script src="data-read.js?v=20260730s"></script>
+<script src="data-know.js?v=20260730s"></script>
+<script src="data-beauty-skin.js?v=20260730s"></script>
+<script src="data-ai.js?v=20260730s"></script>
+<script src="data-illus.js?v=20260730s"></script>
+<script src="data-review.js?v=20260730s"></script>
+<script src="data-paper.js?v=20260730s"></script>
+<script src="data-news.js?v=20260730s"></script>
+<script src="data-diet.js?v=20260730s"></script>
+<script src="data-trans.js?v=20260730s"></script>
+<script src="data-ted.js?v=20260730s"></script>
+<script src="data-bridge-adv.js?v=20260730s"></script>
+<script src="app.js?v=20260730s"></script>
+<script src="sync.js?v=20260730s"></script>
 <script>
 /* ============ 注册 service worker（PWA · 离线可用） ============ */
 if("serviceWorker" in navigator){
