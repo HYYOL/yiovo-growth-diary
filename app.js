@@ -1,5 +1,5 @@
 // ================= Yiiovo 的成长日记 · 核心逻辑 =================
-const APP_VER="v20260730q"; // 手机端版本水印：改版时务必同步此值，便于确认是否刷到新版
+const APP_VER="v20260730r"; // 手机端版本水印：改版时务必同步此值，便于确认是否刷到新版
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const todayStr=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
 const dayIndex=off=>Math.floor(Date.now()/86400000)-(off||0);
