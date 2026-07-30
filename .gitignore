@@ -1,0 +1,17 @@
+# 隐私/项目记忆，绝不公开
+.workbuddy/
+
+# 本地开发辅助脚本（不需要进仓库）
+serve.js
+serve_nocache.py
+start-server.bat
+gen-tts.js
+
+# 未使用的原始素材/旧数据
+tts/
+data-beauty.js
+data-skin.js
+
+# 系统文件
+.DS_Store
+Thumbs.db

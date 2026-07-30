@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="theme-color" content="#7ec3f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Yiiovo 的成长日记">
+<title>Yiiovo 的成长日记 🗓</title>
+<!-- JS 启动前先强制跳到带版本号的 URL，破华为浏览器 HTTP 缓存 -->
+<script>if(!location.search.match(/[?&]v=/))location.replace("./?v=20260730q&_t="+Date.now());</script>
+<link rel="manifest" href="manifest.json?v=20260730q">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<base href="./">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Pacifico&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20260730q">
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== 真 PWA 安装引导横幅（捕获 beforeinstallprompt，避免华为装成快捷方式） ===== -->
+  <div id="install-banner" class="install-banner hidden" role="status">
+    <span class="install-ico">📲</span>
+    <div class="install-txt">
+      <b>安装到桌面当 App</b>
+      <div class="install-tip">点「安装」即可变成独立全屏应用（无地址栏、可常驻桌面）。</div>
+    </div>
+    <button class="install-btn" id="install-btn">安装</button>
+    <button class="install-close" id="install-close" aria-label="关闭">✕</button>
+  </div>
+
+  <!-- ===== 左侧导航栏 ===== -->
+  <aside class="sidebar">
+    <button class="side-collapse" id="side-collapse" title="折叠/展开侧栏">⮜</button>
+    <div class="side-logo">
+      <img src="assets/饭团.jpg" alt="饭团" class="logo-dog-img">
+      <div class="logo-cloud">☁️</div>
+    </div>
+    <nav class="side-nav" id="side-nav">
+      <button class="nav-item active" data-page="home"><span class="nav-ico">🏠</span><span class="nav-txt">首页</span></button>
+      <button class="nav-item" data-page="plan"><span class="nav-ico">📅</span><span class="nav-txt">每日<br>计划</span></button>
+
+      <div class="nav-group collapsed" data-group="news">
+        <button class="nav-group-head"><span class="nav-ico">📰</span><span class="nav-txt">资讯<br>瞭望</span><span class="nav-arrow">▾</span></button>
+        <div class="nav-sub-list">
+          <button class="nav-sub" data-page="baoyan"><span class="nav-ico">📌</span><span class="nav-txt">保研<br>资讯</span></button>
+          <button class="nav-sub" data-page="news"><span class="nav-ico">🔥</span><span class="nav-txt">新闻<br>热点</span></button>
+        </div>
+      </div>
+
+      <div class="nav-group nav-open" data-group="study">
+        <button class="nav-group-head"><span class="nav-ico">📚</span><span class="nav-txt">求知<br>工坊</span><span class="nav-arrow">▾</span></button>
+        <div class="nav-sub-list">
+          <button class="nav-sub" data-page="bridge"><span class="nav-ico">🌉</span><span class="nav-txt">桥梁<br>知识</span></button>
+          <button class="nav-sub" data-page="english"><span class="nav-ico">🔤</span><span class="nav-txt">英语<br>专项</span></button>
+          <button class="nav-sub" data-page="knowledge"><span class="nav-ico">💡</span><span class="nav-txt">知识<br>拓展</span></button>
+          <button class="nav-sub" data-page="ai"><span class="nav-ico">✨</span><span class="nav-txt">AI<br>创作</span></button>
+        </div>
+      </div>
+
+      <div class="nav-group collapsed" data-group="life">
+        <button class="nav-group-head"><span class="nav-ico">🏡</span><span class="nav-txt">生活<br>一隅</span><span class="nav-arrow">▾</span></button>
+        <div class="nav-sub-list">
+          <button class="nav-sub" data-page="beauty"><span class="nav-ico">🎀</span><span class="nav-txt">变美<br>护肤</span></button>
+          <button class="nav-sub" data-page="health"><span class="nav-ico">🍎</span><span class="nav-txt">健康<br>生活</span></button>
+          <button class="nav-sub" data-page="ledger"><span class="nav-ico">💰</span><span class="nav-txt">记账</span></button>
+        </div>
+      </div>
+
+      <button class="nav-item" data-page="weekly"><span class="nav-ico">✅</span><span class="nav-txt">周度<br>复盘</span></button>
+    </nav>
+    <div class="side-foot">
+      <div class="sync-badge" id="sync-badge" title="数据自动保存到本地">
+        <span class="sync-dot"></span><span class="sync-txt">本地</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== 右侧主内容区 ===== -->
+  <main class="main" id="main">
+
+    <!-- ============ 首页 ============ -->
+    <section class="page active" id="page-home">
+      <header class="hero card-grad">
+        <div class="hero-deco">☁️</div>
+        <div class="hero-deco d2">🌸</div>
+        <div class="hero-title-stack">
+          <div class="hero-title-main">Yiiovo</div>
+          <div class="hero-title-sub">成长日记🗓</div>
+        </div>
+        <p class="slogan">Be your best project. ✨</p>
+        <p class="hero-sub">LOVE  YOURSELF <span id="home-date"></span></p>
+        <div class="hero-dog">
+          <img src="assets/饭团.jpg" alt="饭团" class="hero-dog-img" id="hero-dog-img">
+        </div>
+        <div class="hero-stats">
+          <div class="hs"><b id="hs-streak">0</b><span>连续打卡</span></div>
+          <div class="hs"><b id="hs-day">1</b><span>使用天数</span></div>
+        </div>
+      </header>
+
+      <div class="stat-row">
+        <div class="stat-card sc1">
+          <div class="stat-num" id="stat-done">0/0</div>
+          <div class="stat-label">✅ 今日完成任务</div>
+        </div>
+        <div class="stat-card sc2">
+          <div class="stat-num" id="stat-study">0</div>
+          <div class="stat-label">📚 待学习条目</div>
+        </div>
+        <div class="stat-card sc3">
+          <div class="stat-num" id="stat-read">0</div>
+          <div class="stat-label">📄 待阅读资料</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🐾 今日待学习汇总</div>
+        <div id="home-summary" class="summary-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🕓 最近学习记录</div>
+        <div id="home-recent" class="recent-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ 每日计划 ============ -->
+    <section class="page" id="page-plan">
+      <header class="page-head"><h2>📝 每日计划</h2><p>自律养狗计划 · 完成任务喂饱饭团 🐶</p></header>
+
+      <div class="card dog-card">
+        <div class="dog-stage">
+          <img src="assets/饭团.jpg" alt="饭团" class="dog-stage-img" id="dog-img">
+          <div id="dog-fx"></div>
+          <div class="dog-bubble" id="dog-bubble">汪！今天也要加油哦～</div>
+        </div>
+        <div class="dog-status-row">
+          <div class="dog-meta">
+            <div class="dog-name">饭团 · <span id="dog-mood">元气满满</span></div>
+            <div class="dog-res">🦴 狗粮 × <span id="food-count">0</span>　💧 水 × <span id="water-count">0</span>　🎾 玩耍 × <span id="play-count">0</span></div>
+            <div class="dog-streak">🔥 连续喂养 <span id="streak-count">0</span> 天</div>
+            <div class="dog-stat">
+              <span class="ds-label">💗 健康值</span>
+              <div class="bar"><div class="bar-fill" id="bar-health"></div></div><span class="ds-val" id="health-val">70</span>
+            </div>
+            <div class="dog-stat">
+              <span class="ds-label">✨ 精神值</span>
+              <div class="bar"><div class="bar-fill" id="bar-spirit"></div></div><span class="ds-val" id="spirit-val">70</span>
+            </div>
+          </div>
+          <div class="dog-actions">
+            <button class="btn-feed" id="btn-feed">🍖 喂食</button>
+            <button class="btn-feed" id="btn-water">💧 喂水</button>
+            <button class="btn-feed" id="btn-play">🎾 玩耍</button>
+          </div>
+        </div>
+        <div class="dog-warn" id="dog-warn"></div>
+        <div class="dog-hint">每完成一项任务，饭团会随机获得 🦴狗粮 / 💧清水 / 🎾玩耍，并提升健康值与精神值；点上方按钮消耗对应物资进一步加值～</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✅ 今日待办清单 <span class="tag-date" id="plan-date"></span></div>
+        <div class="todo-add">
+          <input type="text" id="todo-input" placeholder="添加今天的计划，比如：背50个专业单词…" maxlength="50">
+          <button id="todo-add-btn">＋添加</button>
+        </div>
+        <ul class="todo-list" id="todo-list"></ul>
+        <div class="todo-progress"><div class="todo-bar" id="todo-bar"></div></div>
+        <div class="todo-tip" id="todo-tip"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🗓 每日打卡 · 任务复盘</div>
+        <textarea id="review-input" placeholder="写下今天的复盘：完成了什么？哪里可以更好？(o´ω`o)"></textarea>
+        <button class="btn-main" id="review-save">保存今日复盘 ✍️</button>
+        <div class="review-history" id="review-history"></div>
+      </div>
+    </section>
+
+    <!-- ============ 保研资讯（保持原名） ============ -->
+    <section class="page" id="page-baoyan">
+      <header class="page-head"><h2>🎓 保研资讯</h2><p>院校等级 ≥ 西南交通大学（含本校）· 土木/交通/经管 · 持续更新到 2026</p><button class="head-fav" data-mod="baoyan">❤️ 我的收藏</button></header>
+      <div class="filter-row" id="baoyan-filter">
+        <button class="chip active" data-f="all">全部</button>
+        <button class="chip" data-f="夏令营">夏令营</button>
+        <button class="chip" data-f="预推免">预推免</button>
+        <button class="chip" data-f="直博">直博</button>
+        <button class="chip" data-f="导师动态">导师动态</button>
+      </div>
+      <div class="card note-card">⚠️ 资讯已更新到 2026 年（部分含 2025-2026 推免动态与导师招生信息），报名前请以各校研究生院官网为准，点击链接可直达官网核实。院校范围：综合/学科排名高于西南交通大学及西南交通大学本体（985/211）。</div>
+      <div class="card-title sub-title">☁️ 今日新增</div>
+      <div id="baoyan-today"></div>
+      <div class="card-title sub-title">📂 历史归档（可回看）</div>
+      <div id="baoyan-archive"></div>
+    </section>
+
+    <!-- ============ 桥梁知识学习 ============ -->
+    <section class="page" id="page-bridge">
+      <header class="page-head"><h2>🌉 桥梁知识学习</h2><p>零基础入门 · 每日 30 条 · 分章节循序渐进</p><button class="head-fav" data-mod="bridge">❤️ 我的收藏</button></header>
+      <div class="filter-row bridge-tabs">
+        <button class="chip active" data-bt="learn">📖 知识学习</button>
+        <button class="chip" data-bt="review">🗂 桥梁复习</button>
+      </div>
+      <div id="bridge-learn-panel">
+        <div class="filter-row" id="bridge-chapters"></div>
+        <div class="card note-card blue">📖 今日已推送 <b id="bridge-count">30</b> 条知识点 · 切换上方章节系统学习 · 每天自动更新 · 点击 ⭐ 可收藏</div>
+        <div id="bridge-list"></div>
+        <button class="btn-ghost" id="bridge-history-btn">📂 回看往日知识点</button>
+        <div id="bridge-history"></div>
+      </div>
+      <div id="bridge-review-panel" class="hidden"></div>
+    </section>
+
+    <!-- ============ 英语专项 ============ -->
+    <section class="page" id="page-english">
+      <header class="page-head"><h2>🔤 英语专项学习</h2><p>土木专业英语 · 保研面试笔试定向</p><button class="head-fav" data-mod="english">❤️ 我的收藏</button></header>
+      <div class="accent-row">🗣 朗读发音：
+        <button class="acc-btn active" data-acc="en-GB">英式 🇬🇧</button>
+        <button class="acc-btn" data-acc="en-US">美式 🇺🇸</button>
+      </div>
+      <div class="filter-row">
+        <button class="chip etab active" data-t="word">📇 每日单词</button>
+        <button class="chip etab" data-t="read">📄 文献阅读</button>
+        <button class="chip etab" data-t="paper">📚 长文献（PubMed）</button>
+        <button class="chip etab" data-t="trans">🌐 翻译练习</button>
+        <button class="chip etab" data-t="ted">🎤 TED 朗读</button>
+        
+      </div>
+
+      <div class="etab-panel" id="epanel-word">
+        <div class="card word-flash">
+          <div class="flash-count" id="flash-count">1 / 50</div>
+          <div class="flash-word" id="flash-word">bridge</div>
+          <div class="flash-phon" id="flash-phon"></div>
+          <button class="btn-sound" id="flash-sound">🔊 朗读</button>
+          <div class="flash-answer hidden" id="flash-answer">
+            <div class="flash-cn" id="flash-cn"></div>
+            <div class="flash-sent" id="flash-sent"></div>
+            <div class="flash-sentcn" id="flash-sentcn"></div>
+          </div>
+          <div class="flash-btns" id="flash-btns">
+            <button class="btn-know" id="btn-know">😎 认识</button>
+            <button class="btn-unknow" id="btn-unknow">🤔 不认识</button>
+          </div>
+          <div class="flash-btns hidden" id="flash-next-row">
+            <button class="btn-ghost" id="btn-undo-word">↩ 撤销</button>
+            <button class="btn-main" id="btn-next-word">下一个 →</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 今日背诵进度</div>
+          <div class="todo-progress"><div class="todo-bar" id="word-bar"></div></div>
+          <div class="word-stat" id="word-stat">已背 0 / 50 · 认识 0 · 待巩固 0</div>
+          <button class="btn-ghost" id="word-list-btn">📋 查看今日 50 词全列表</button>
+          <div id="word-full-list" class="hidden"></div>
+        </div>
+      </div>
+
+      <div class="etab-panel hidden" id="epanel-read">
+        <div class="card note-card blue">📄 每日 5 篇土木方向 SCI 风格短文 · 含阅读理解 + 全文中文翻译</div>
+        <div id="reading-list"></div>
+      </div>
+
+      <div class="etab-panel hidden" id="epanel-paper">
+        <div class="card">
+          <div class="card-title">📚 长文献阅读（每日 PubMed 桥梁相关 2 篇）</div>
+          <div class="paper-cfg">
+            <label>研究方向 <input type="text" id="paper-keyword" placeholder="如 bridge health monitoring / 桥梁抗震 / 智能建造"></label>
+            <button class="btn-ghost sm" id="paper-refresh">🔄 重新检索</button>
+            <span class="paper-updated">⏰ 每日 0 点自动更新 · 上次更新 <b id="paper-time">--</b></span>
+          </div>
+          <div class="sleep-tip">💡 改完研究方向后点「重新检索」即可更换。所有外链（PubMed / 期刊 / 公众号）均在写入前通过 HEAD 请求验证可访问，标 ✅ 表示已验证可打开；标 ⚠️ 表示第三方资源（公众号文章随时可能删）已通过搜索引擎检索，但可能失效。</div>
+        </div>
+        <div id="paper-list"></div>
+        <div class="card">
+          <div class="card-title">✍️ 我的阅读感受与收获</div>
+          <textarea id="paper-note" placeholder="今日阅读完两篇文献后，写下你的感受、收获、对你未来研究方向的影响……"></textarea>
+          <button class="btn-main" id="paper-note-save">保存阅读笔记 ⭐</button>
+          <div id="paper-note-history" class="note-history"></div>
+        </div>
+      </div>
+
+      <div class="etab-panel hidden" id="epanel-trans">
+        <div class="card">
+          <div class="card-title">🌐 翻译练习 · 中译英 / 英译中</div>
+          <div class="sleep-tip" style="margin-top:0">根据你的方向给一句中文/英文，你翻译后点「检查」自动判断正误并给范例。支持中译英与英译中两种模式。</div>
+          <div class="trans-box" id="trans-box"></div>
+          <div class="trans-ctrl">
+            <button class="btn-main" id="trans-check">✅ 检查</button>
+            <button class="btn-ghost" id="trans-next">🔄 换一句</button>
+            <span class="trans-score" id="trans-score"></span>
+          </div>
+          <div class="trans-fb" id="trans-fb"></div>
+        </div>
+      </div>
+
+      <div class="etab-panel hidden" id="epanel-ted">
+        <div class="card">
+          <div class="card-title">🎤 TED 文章朗读 · 每日一篇</div>
+          <div class="sleep-tip" style="margin-top:0">每天自动轮换一篇 TED 风格演讲文稿，点「开始朗读」用 Cora 的嗓音陪你磨耳朵。白天可「预览换一篇」。</div>
+          <div class="ted-pick" id="ted-pick"></div>
+          <div class="ss-ctrl">
+            <button class="btn-sleep" id="ted-play">▶ 开始朗读</button>
+            <button class="btn-sleep ghost" id="ted-stop">⏹ 停止</button>
+            <button class="btn-ghost" id="ted-cn">🌐 显示中文翻译</button>
+            <button class="btn-ghost" id="ted-next">🔄 预览换一篇</button>
+          </div>
+          <div class="ted-text" id="ted-text"></div>
+          <div class="sleep-tip" id="ted-tip"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 知识拓展 ============ -->
+    <section class="page" id="page-knowledge">
+      <header class="page-head"><h2>💡 知识拓展</h2><p>每日 50 条 · 土木前沿 / AI智能建造 / 前沿科技 / 女性养生</p><button class="head-fav" data-mod="knowledge">❤️ 我的收藏</button></header>
+      <div class="filter-row" id="know-filter">
+        <button class="chip active" data-f="all">全部</button>
+        <button class="chip" data-f="土木前沿">🏗 土木前沿</button>
+        <button class="chip" data-f="AI建造">🤖 AI/智能建造</button>
+        <button class="chip" data-f="前沿科技">🚀 前沿科技</button>
+        <button class="chip" data-f="女性养生">🌸 女性养生</button>
+      </div>
+      <div id="knowledge-list"></div>
+    </section>
+
+    <!-- ============ 变美 & 护肤（合并） ============ -->
+    <section class="page" id="page-beauty">
+      <header class="page-head"><h2>🎀 变美 & 护肤</h2><p>158cm / 105 定制 · 穿搭·塑形·好物·妆教·敏感肌护肤</p><button class="head-fav" data-mod="beauty">❤️ 我的收藏</button></header>
+      <div class="card note-card pink" id="beauty-archive"></div>
+      <div class="filter-row beauty-tabs" id="beauty-tabs">
+        <button class="chip active" data-bt="know">📚 变美护肤知识</button>
+        <button class="chip" data-bt="sk">🧴 护肤品搭配建议</button>
+        <button class="chip" data-bt="mk">💄 化妆品组合建议</button>
+      </div>
+      <div class="bt-panel" id="bt-know">
+      <div class="filter-row" id="beauty-filter">
+        <button class="chip active" data-f="all">全部</button>
+        <button class="chip" data-f="穿搭">👗 穿搭</button>
+        <button class="chip" data-f="塑形">🏃‍♀️ 塑形</button>
+        <button class="chip" data-f="好物">💄 好物</button>
+        <button class="chip" data-f="妆教">✨ 妆教</button>
+        <button class="chip" data-f="护肤知识">📖 护肤知识</button>
+        <button class="chip" data-f="产品">🧴 产品建议</button>
+        <button class="chip" data-f="流程">🛁 护肤流程</button>
+        <button class="chip" data-f="改善">🌿 闭口黑头改善</button>
+      </div>
+      <div id="beauty-list"></div>
+      </div><!-- /bt-know -->
+
+      <!-- 拍照分析护肤品 -->
+      <div class="bt-panel hidden" id="bt-sk">
+      <div class="card sk-tool">
+        <div class="card-title">📸 拍照分析我现有的护肤品 · 搭配建议</div>
+        <div class="sleep-tip" style="margin-top:0">把你的护肤品（洁面 / 水 / 精华 / 面霜 / 防晒 等）拍照上传，下面写下产品名称 + 你的皮肤困扰，我根据<b>你上方「💗 专属档案」（点 ✏️ 可随时更新皮肤状态）</b>给出 ① 哪些可以保留 ② 哪些该停掉 ③ 推荐补充什么 ④ 早晚使用顺序（按你最新档案的肤质与屏障状态定制）。</div>
+        <div class="sk-up-row">
+          <label class="diet-upload sk-upload">
+            <input type="file" id="sk-photo" accept="image/*" hidden>
+            <div class="du-ico">📷</div>
+            <div class="du-txt">上传护肤品照片</div>
+          </label>
+          <img id="sk-photo-preview" class="diet-photo-preview hidden" alt="护肤品照片">
+        </div>
+        <textarea id="sk-list" rows="3" placeholder="例如：芙丽芳丝洗面奶、SK-II 神仙水、雅诗兰黛小棕瓶、珂润面霜、安耐晒金瓶…（一行写一个，或写品牌+功效）"></textarea>
+        <div class="sk-concern-row">
+          <label><input type="checkbox" class="sk-concern" value="两颊泛红"> 两颊泛红</label>
+          <label><input type="checkbox" class="sk-concern" value="闭口粉刺" checked> 闭口粉刺</label>
+          <label><input type="checkbox" class="sk-concern" value="毛孔粗大" checked> 毛孔粗大</label>
+          <label><input type="checkbox" class="sk-concern" value="鼻子黑头" checked> 鼻子黑头</label>
+          <label><input type="checkbox" class="sk-concern" value="下巴小疙瘩" checked> 下巴小疙瘩</label>
+          <label><input type="checkbox" class="sk-concern" value="炎性痘痘"> 炎性痘痘</label>
+          <label><input type="checkbox" class="sk-concern" value="陈旧痘印"> 陈旧痘印</label>
+          <label><input type="checkbox" class="sk-concern" value="孕/哺乳期"> 孕/哺乳期</label>
+        </div>
+        <button class="btn-main" id="sk-analyze-btn">🔍 根据我的档案给出搭配方案</button>
+        <div id="sk-result" class="sk-result"></div>
+        <div id="sk-history" class="sk-history"></div>
+      </div>
+      </div><!-- /bt-sk -->
+
+      <!-- 拍照分析化妆品·妆容组合 -->
+      <div class="bt-panel hidden" id="bt-mk">
+      <div class="card sk-tool">
+        <div class="card-title">💄 拍照我的化妆品 · 妆容组合</div>
+        <div class="sleep-tip" style="margin-top:0">把你现有的化妆品拍照上传，写下产品名 + 想要的妆容场景，我帮你 ① 选出要用的产品组合 ② 上妆顺序 ③ 适合你肤质的小心机。</div>
+        <div class="sk-up-row">
+          <label class="diet-upload sk-upload">
+            <input type="file" id="mk-photo" accept="image/*" hidden>
+            <div class="du-ico">💄</div>
+            <div class="du-txt">上传化妆品照片</div>
+          </label>
+          <img id="mk-photo-preview" class="diet-photo-preview hidden" alt="化妆品照片">
+        </div>
+        <textarea id="mk-list" rows="3" placeholder="例如：CPB 长管隔离、雅诗兰黛 DW 粉底液、nars 腮红、3CE 口红…"></textarea>
+        <div class="filter-row" id="mk-look-row">
+          <button class="chip active" data-look="日常通勤">💼 日常通勤</button>
+          <button class="chip" data-look="约会淡妆">💗 约会淡妆</button>
+          <button class="chip" data-look="面试气质">🎓 面试气质</button>
+          <button class="chip" data-look="伪素颜">🤍 伪素颜</button>
+          <button class="chip" data-look="中式新中式">🏮 中式新中式</button>
+          <button class="chip" data-look="晚宴/约会">🌙 晚宴/约会</button>
+          <button class="chip" data-look="夏日清透">☀️ 夏日清透</button>
+        </div>
+        <button class="btn-main" id="mk-analyze-btn">✨ 帮我组合妆容</button>
+        <div id="mk-result" class="sk-result"></div>
+        <div id="mk-history" class="sk-history"></div>
+      </div>
+      </div><!-- /bt-mk -->
+    </section>
+
+    <!-- ============ AI 创作 ============ -->
+    <section class="page" id="page-ai">
+      <header class="page-head"><h2>✨ AI 创作</h2><p>和 Cora 一起，把灵感变成完整故事</p></header>
+
+      <div class="card">
+        <div class="card-title">💡 灵感记录（随时记下你的小灵感）</div>
+        <textarea id="insp-input" placeholder="灵光一闪？写下来，比如：想写一个关于桥与重逢的短篇…"></textarea>
+        <button class="btn-main" id="insp-save">保存灵感 ⭐</button>
+        <div class="insp-history" id="insp-history"></div>
+      </div>
+
+      <div class="ai-head-row">
+        <div class="card-title" style="margin:0">📝 我的创作对话框</div>
+        <button class="btn-new-ai" id="ai-new">＋ 新建对话</button>
+      </div>
+      <div id="ai-dialogs"></div>
+    </section>
+
+    <!-- ============ 记账 ============ -->
+    <section class="page" id="page-ledger">
+      <header class="page-head"><h2>💰 我的记账</h2><p>记录存款与每日开支 · 每日更新 · 可复盘</p></header>
+
+      <div class="card">
+        <div class="card-title">💰 资产概览</div>
+        <div class="ledger-stats">
+          <div class="ls"><div class="ls-num" id="lg-savings">0</div><div class="ls-lab">🏦 当前存款(元)</div></div>
+          <div class="ls"><div class="ls-num" id="lg-today">0</div><div class="ls-lab">📅 今日开支(元)</div></div>
+          <div class="ls"><div class="ls-num" id="lg-total">0</div><div class="ls-lab">📊 累计支出(元)</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏦 存入 / 更新存款</div>
+        <input type="number" id="lg-save-input" placeholder="输入当前总存款金额（元）" min="0">
+        <button class="btn-main" id="lg-save-btn">更新存款 💰</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">➕ 记一笔今日开支</div>
+        <div class="filter-row" id="lg-cats">
+          <button class="chip active" data-c="餐饮">🍚 餐饮</button>
+          <button class="chip" data-c="交通">🚌 交通</button>
+          <button class="chip" data-c="购物">🛍 购物</button>
+          <button class="chip" data-c="学习">📚 学习</button>
+          <button class="chip" data-c="娱乐">🎮 娱乐</button>
+          <button class="chip" data-c="其他">📦 其他</button>
+        </div>
+        <input type="number" id="lg-amt" placeholder="金额（元）" min="0" step="0.01">
+        <input type="text" id="lg-note" placeholder="备注（可选），如：奶茶 / 公交卡充值" maxlength="30">
+        <button class="btn-main" id="lg-add-btn">记下来 🐾</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 近 7 日开支趋势</div>
+        <div class="lg-chart" id="lg-chart"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📂 开支复盘（按日）</div>
+        <div id="lg-history"></div>
+      </div>
+    </section>
+
+    <!-- ============ 健康生活（合并：喝水 + 饮食 + 睡眠） ============ -->
+    <section class="page" id="page-health">
+      <header class="page-head"><h2>🍎 健康生活</h2><p>喝水打卡 · 饮食记录 · 睡眠分析 · 全部集中在这里</p></header>
+
+      <!-- 顶部 4 卡：晨重/累计/目标/TDEE（不论在哪个 tab 都显示） -->
+      <div class="card weight-card">
+        <div class="card-title">⚖️ 体重追踪</div>
+        <div class="wt-row">
+          <div class="wt-stat"><div class="wt-ico">⚖️</div><div class="wt-num" id="wt-latest">--</div><div class="wt-lab">最近晨重(kg)</div></div>
+          <div class="wt-stat"><div class="wt-ico">📈</div><div class="wt-num" id="wt-change">0</div><div class="wt-lab">累计变化(kg)</div></div>
+          <div class="wt-stat"><div class="wt-ico">🎯</div><div class="wt-num" id="wt-target">--</div><div class="wt-lab">目标体重(kg)</div></div>
+          <div class="wt-stat"><div class="wt-ico">🔥</div><div class="wt-num" id="wt-tdee">--</div><div class="wt-lab">每日消耗 TDEE</div></div>
+        </div>
+        <div class="sleep-tip" id="wt-tip">💗 身高/体重/活动量 暂未设置，前往 <b>健康生活 → 饮食 → 设置</b> 录入后会显示具体数据</div>
+      </div>
+
+      <div class="filter-row health-tabs">
+        <button class="chip active" data-ht="water">💧 喝水</button>
+        <button class="chip" data-ht="diet">🍱 饮食</button>
+        <button class="chip" data-ht="sleep">😴 睡眠</button>
+      </div>
+
+      <!-- 喝水子页 -->
+      <div class="ht-panel" id="ht-water">
+        <div class="card water-hero">
+          <div class="wh-num"><b id="wh-cup">0</b><span>/8 杯</span></div>
+          <div class="wh-pct">今日已完成 <b id="wh-pct">0</b>% · 记得喝水哦~</div>
+          <div class="wh-bar"><div class="wh-bar-fill" id="wh-bar"></div></div>
+          <div class="wh-amount">已喝 <b id="wh-ml">0</b> ml · 目标 <b id="wh-target">2400</b> ml</div>
+        </div>
+        <div class="card">
+          <div class="card-title">⏰ 今日 8 杯水打卡</div>
+          <div class="water-grid" id="water-grid"></div>
+          <div class="sleep-tip">🕐 喝水时间表可自由调整：点下方「⚙️ 管理时间表」删掉 7:00、改成你起得来的时间，或新增任意时间点。</div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚙️ 管理喝水时间表</div>
+          <div class="sleep-tip">7 点起不来？把那一格删掉或改时间都行；也能新增任意时间点。改动会自动保存。</div>
+          <div id="ws-rows"></div>
+          <div class="ws-add">
+            <input type="time" id="ws-time" value="09:00">
+            <input type="number" id="ws-ml" placeholder="ml" step="50" value="300">
+            <button class="btn-main" id="ws-add-btn">➕ 添加时间点</button>
+            <button class="btn-ghost" id="ws-reset">恢复默认</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 饮水统计</div>
+          <div class="wh-stats">
+            <div class="wh-s"><b id="wh-streak">0</b><span>🔥 连续达标(天)</span></div>
+            <div class="wh-s"><b id="wh-week">0</b><span>📅 周均(杯/天)</span></div>
+            <div class="wh-s"><b id="wh-today-pct">0</b><span>💧 今日进度%</span></div>
+          </div>
+          <div class="card-title" style="margin-top:14px">📂 历史（按日折叠）</div>
+          <div id="wh-history"></div>
+        </div>
+      </div>
+
+      <!-- 饮食子页 — 拍照自由记录 -->
+      <div class="ht-panel hidden" id="ht-diet">
+        <!-- ① 昨日分析横幅 (按零点自动出) -->
+        <div class="card diet-analysis hidden" id="diet-analysis">
+          <div class="da-head">
+            <div class="da-title">📊 昨日饮食分析 <span class="da-date" id="da-date"></span></div>
+            <button class="da-close" id="da-close" title="收起">▾</button>
+          </div>
+          <div class="da-body" id="da-body"></div>
+        </div>
+
+        <!-- ② 今日总览 -->
+        <div class="card">
+          <div class="card-title">🍽 今日饮食</div>
+          <div class="diet-row">
+            <div class="diet-stat diet-blue"><b id="diet-in">0</b><span>已摄入 (kcal)</span></div>
+            <div class="diet-stat diet-green"><b id="diet-target-kcal">1600</b><span>今日目标 (kcal)</span></div>
+            <div class="diet-stat diet-orange"><b id="diet-left">--</b><span>还可摄入 (kcal)</span></div>
+            <div class="diet-stat"><b id="diet-meals">0</b><span>餐次</span></div>
+          </div>
+          <div class="sleep-tip" style="margin-top:6px">⏰ 记一笔就好：填时间、吃了什么、热量（或选常用食物自动算）。零点会出昨日分析。</div>
+        </div>
+
+        <!-- ③ 记一笔 + 设置入口 -->
+        <div class="card diet-camera-card">
+          <div class="diet-camera-btns">
+            <button class="btn-main dc-quick" id="dc-quick">➕ 记一笔（时间 · 吃了什么 · 热量）</button>
+          </div>
+          <div class="dc-side">
+            <button class="btn-ghost dc-set" id="diet-set-btn">⚙️ 目标 / 体重设置</button>
+            <button class="btn-ghost dc-analyze" id="dc-analyze">🔄 立即分析昨日</button>
+          </div>
+        </div>
+
+        <!-- ④ 今日记录时间线 -->
+        <div class="card">
+          <div class="card-title">📂 今日记录（按时间倒序）</div>
+          <div id="diet-timeline"></div>
+        </div>
+
+        <!-- ⑤ 设置弹窗：身高/体重/活动/今日目标 kcal -->
+        <div class="modal hidden" id="diet-set-modal">
+          <div class="modal-body card">
+            <div class="card-title">⚙️ 饮食健康设置</div>
+            <label>身高 (cm)<input type="number" id="ds-height" placeholder="如 158"></label>
+            <label>当前体重 (kg)<input type="number" id="ds-weight" step="0.1" placeholder="如 52.5"></label>
+            <label>年龄<input type="number" id="ds-age" placeholder="如 21"></label>
+            <label>活动量
+              <select id="ds-activity">
+                <option value="1.2">久坐（基本不运动）</option>
+                <option value="1.375">轻度（每周 1-2 次）</option>
+                <option value="1.55" selected>中度（每周 3-5 次）</option>
+                <option value="1.725">高度（每周 6-7 次）</option>
+                <option value="1.9">运动员级别</option>
+              </select>
+            </label>
+            <label>今日目标热量 (kcal)
+              <input type="number" id="ds-target" placeholder="默认按公式算，可手动改" step="50">
+            </label>
+            <div class="sleep-tip" id="ds-formula">填好身高体重后会自动算出建议值</div>
+            
+            <div class="modal-btns">
+              <button class="btn-ghost" id="ds-cancel">取消</button>
+              <button class="btn-main" id="ds-save">保存</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⑥ 拍照+选食物弹窗 -->
+        <div class="modal hidden" id="diet-modal">
+          <div class="modal-body card dm-body">
+            <div class="dm-head">
+              <div class="card-title">🍽 记下这一餐</div>
+              <button class="da-close" id="dm-x">✕</button>
+            </div>
+
+            <!-- 时间 -->
+            <div class="dm-time-row">
+              <span>🕐 吃饭时间</span>
+              <input type="time" id="dm-time-input">
+            </div>
+
+            <!-- 快速添加：8 个热门 -->
+            <div class="dm-section">
+              <div class="dm-label">⚡ 快速添加</div>
+              <div class="dm-quick" id="dm-quick"></div>
+            </div>
+
+            <!-- 搜索 -->
+            <div class="dm-section">
+              <div class="dm-label">🔍 搜索食物（输入名称或别名）</div>
+              <input type="text" id="dm-search" placeholder="如 米饭 / 苹果 / 汉堡 / 奶茶" autocomplete="off">
+              <div class="dm-suggest hidden" id="dm-suggest"></div>
+            </div>
+
+            <!-- 直接记一笔：自己填热量 -->
+            <div class="dm-section">
+              <div class="dm-label">✍️ 直接记一笔（自己填热量）</div>
+              <input type="text" id="dm-c-name" placeholder="吃了什么，如：妈妈做的红烧肉 / 某牌全麦面包 / 一杯奶茶">
+              <div class="dm-c-row">
+                <label class="dm-c-field">这餐总热量<input type="number" id="dm-c-kcal" min="0" step="1" placeholder="kcal"> kcal</label>
+              </div>
+              <button type="button" class="btn-main dm-c-add" id="dm-c-add" disabled>➕ 记下来</button>
+            </div>
+
+            <!-- 已选 + 份量 + 合计 -->
+            <div class="dm-section dm-selected hidden" id="dm-selected">
+              <div class="dm-label">✅ 已选食物</div>
+              <div class="dm-picked">
+                <span class="dm-pick-emoji" id="dm-pick-emoji">🍚</span>
+                <div class="dm-pick-info">
+                  <div class="dm-pick-name" id="dm-pick-name">--</div>
+                  <div class="dm-pick-kcal" id="dm-pick-kcal">--</div>
+                </div>
+              </div>
+              <div class="dm-portion">
+                <div class="dm-port-row">
+                  <span>份量：</span>
+                  <button type="button" class="portion-btn" data-p="0.6">小份</button>
+                  <button type="button" class="portion-btn active" data-p="1">中份</button>
+                  <button type="button" class="portion-btn" data-p="1.4">大份</button>
+                </div>
+              <div class="dm-port-row" id="dm-qty-row">
+                <span>重量：</span>
+                <input type="number" id="dm-qty" min="1" step="10"> g
+                  <span class="dm-qty-tip" id="dm-qty-tip"></span>
+                </div>
+              </div>
+              <div class="dm-total-row">
+                合计 <b id="dm-total-kcal">0</b> kcal
+                <span class="dm-cat" id="dm-cat"></span>
+              </div>
+            </div>
+
+            <div class="modal-btns">
+              <button class="btn-ghost" id="dm-cancel">取消</button>
+              <button class="btn-main" id="dm-save" disabled>💾 保存到今日</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 睡眠子页 -->
+      <div class="ht-panel hidden" id="ht-sleep">
+        <div class="card sleep-hero">
+          <div class="sl-row">
+            <div class="sl-time"><b id="sl-last-dur">--</b><span>上次睡眠时长</span></div>
+            <div class="sl-time"><b id="sl-last-q">--</b><span>上次质量评分</span></div>
+            <div class="sl-time"><b id="sl-avg">--</b><span>近 7 日均时</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🛏 今日睡眠打卡</div>
+          <div class="sl-form">
+            <label>上床时间<input type="time" id="sl-bed"></label>
+            <label>起床时间<input type="time" id="sl-wake"></label>
+            <label>质量评分（1-5 星）
+              <div class="sl-stars" id="sl-stars">
+                <span data-s="1">☆</span><span data-s="2">☆</span><span data-s="3">☆</span><span data-s="4">☆</span><span data-s="5">☆</span>
+              </div>
+            </label>
+            <label>状态/备注
+              <select id="sl-state">
+                <option>😴 深睡充足</option>
+                <option>😐 一般</option>
+                <option>😪 多梦易醒</option>
+                <option>😫 失眠熬夜</option>
+                <option>💤 补觉回血</option>
+              </select>
+            </label>
+            <textarea id="sl-note" placeholder="备注：今天因为喝咖啡睡不着 / 备考焦虑 / 运动后睡得香 ..." maxlength="200"></textarea>
+            <button class="btn-main" id="sl-save-btn">保存今日睡眠 🛏</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 近 7 日睡眠时长</div>
+          <div class="sl-chart" id="sl-chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📂 睡眠历史（按日折叠）</div>
+          <div id="sl-history"></div>
+        </div>
+
+        <!-- 睡眠哄睡（参考英语哄睡） -->
+        <div class="card sleep-card">
+          <div class="card-title">🌙 睡前哄睡 · 自动渐暗</div>
+          <div class="sleep-tip" style="margin-top:0">设定倒计时（5/15/30/60 分钟），倒计时结束自动停止；屏幕缓慢变暗、循环播放催眠文字，并<b>用温柔的语音轻声读出来</b>（闭眼也能听）。不想听可点「🔇 语音：关」。</div>
+          <div class="ss-presets">
+            <button class="ss-preset active" data-min="15">⏱ 15 分钟</button>
+            <button class="ss-preset" data-min="5">⏱ 5 分钟</button>
+            <button class="ss-preset" data-min="30">⏱ 30 分钟</button>
+            <button class="ss-preset" data-min="60">⏱ 60 分钟</button>
+          </div>
+          <div class="ss-clock" id="ss-clock">
+            <div class="ss-ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/><circle cx="60" cy="60" r="54" fill="none" stroke="#7ec3f0" stroke-width="6" stroke-linecap="round" id="ss-ring" transform="rotate(-90 60 60)" stroke-dasharray="339.292" stroke-dashoffset="0"/></svg>
+            <div class="ss-time" id="ss-time">15:00</div></div>
+          </div>
+          <div class="ss-ctrl">
+            <button class="btn-sleep" id="ss-start">▶ 开始哄睡</button>
+            <button class="btn-sleep ghost" id="ss-stop">⏹ 停止</button>
+            <button class="btn-sleep ghost" id="ss-voice">🔊 语音：开</button>
+            <span class="ss-tip" id="ss-status">点击开始，把手机放床边，闭上眼</span>
+          </div>
+          <div class="ss-curtain hidden" id="ss-curtain"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 新闻热点（每日推送·国家政策+桥梁） ============ -->
+    <section class="page" id="page-news">
+      <header class="page-head"><h2>📰 新闻热点</h2><p>每日自动更新 · 国家政策 · 行业动态 · 桥梁工程 · 校招就业</p></header>
+      <div class="filter-row" id="news-filter">
+        <button class="chip active" data-nf="all">全部</button>
+        <button class="chip" data-nf="国家政策">🇨🇳 国家政策</button>
+        <button class="chip" data-nf="桥梁工程">🌉 桥梁工程</button>
+        <button class="chip" data-nf="行业动态">📈 行业动态</button>
+        <button class="chip" data-nf="校招就业">💼 校招就业</button>
+      </div>
+      <div class="card note-card blue">📅 今日推送 <b id="news-count">0</b> 条 · 全部为已验证可访问的官方/权威链接 · 0 点自动换日 · 点击下方 🔖 可收藏</div>
+      <div class="news-toolbar">
+        <button class="news-archive-btn" id="news-archive-btn">📚 历史归档（<span id="news-arch-count">0</span> 条）</button>
+      </div>
+      <div id="news-list"></div>
+    </section>
+
+    <!-- 新闻归档弹窗 -->
+    <div class="modal hidden" id="news-archive-modal">
+      <div class="modal-overlay" data-close-modal="news-archive-modal"></div>
+      <div class="modal-box">
+        <div class="modal-head"><b>📚 新闻历史归档</b><button class="modal-close" data-close-modal="news-archive-modal">✕</button></div>
+        <div class="modal-body">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <span style="font-size:12px;color:#5b7e9c">最近 30 天推送过的新闻（按日期倒序）</span>
+            <button class="archive-clear" id="news-archive-clear">🗑 清空</button>
+          </div>
+          <div id="news-archive-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 每周复核（基于本周使用数据生成周报 + 建议） ============ -->
+    <section class="page" id="page-weekly">
+      <header class="page-head"><h2>📊 每周复核</h2><p>基于你这一周的真实使用数据自动生成 · 含下周建议</p></header>
+      <div class="card weekly-hero">
+        <div class="wh-week" id="wh-weekrange">--</div>
+        <div class="wh-tag" id="wh-weektag">点击「重新生成」按本周最新数据出一份新报告</div>
+        <button class="btn-main" id="wh-refresh">🔄 重新生成周报</button>
+      </div>
+      <div id="weekly-report"></div>
+    </section>
+
+    <!-- ============ 阅读 ============ -->
+
+  </main>
+
+  <!-- 悬浮编辑按钮 -->
+  <button class="fab" id="fab" title="快速添加今日计划">✏️</button>
+
+  <!-- 快速添加弹窗 -->
+  <div class="modal hidden" id="fab-modal">
+    <div class="modal-body card">
+      <div class="card-title">✏️ 快速添加今日计划</div>
+      <input type="text" id="fab-input" placeholder="例如：完成 5 篇英文文献阅读…" maxlength="50">
+      <div class="modal-btns">
+        <button class="btn-ghost" id="fab-cancel">取消</button>
+        <button class="btn-main" id="fab-ok">添加 🐾</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 复习图片放大 -->
+  <div class="modal hidden" id="rev-img-modal">
+    <div class="modal-body" style="max-width:360px"><img id="rev-img-big" alt="复习图片" style="width:100%;border-radius:12px;display:block"></div>
+  </div>
+
+  <!-- 我的收藏弹窗 -->
+  <div class="modal hidden" id="fav-modal">
+    <div class="modal-body card">
+      <div class="card-title">❤️ 我的收藏 <button class="fav-close" id="fav-close">✕</button></div>
+      <div id="fav-list" class="fav-list"></div>
+    </div>
+  </div>
+
+  <!-- ============ 云端同步设置弹窗 ============ -->
+  <!-- 专属档案编辑弹窗 -->
+  <div class="modal hidden" id="beauty-archive-modal">
+    <div class="modal-body card">
+      <div class="card-title">💗 编辑我的专属档案</div>
+      <div class="ba-grid">
+        <label>身高<input type="text" id="ba-height" placeholder="如 158cm"></label>
+        <label>体重<input type="text" id="ba-weight" placeholder="如 105 斤"></label>
+        <label>身材
+          <select id="ba-shape">
+            <option value="梨形（腿粗+屁股大，腰正常不细）">梨形（腿粗+屁股大，腰正常不细）</option>
+            <option value="苹果形（腰腹胖）">苹果形（腰腹胖）</option>
+            <option value="匀称">匀称</option>
+            <option value="H 型（直筒）">H 型（直筒）</option>
+            <option value="沙漏形">沙漏形</option>
+          </select>
+        </label>
+        <label>肤质
+          <select id="ba-skin">
+            <option value="混合偏油（T区油·两颊偏干）">混合偏油（T区油·两颊偏干）</option>
+            <option value="干皮">干皮</option>
+            <option value="油皮">油皮</option>
+            <option value="混合偏干">混合偏干</option>
+            <option value="中性">中性</option>
+          </select>
+        </label>
+        <label>屏障状态
+          <select id="ba-barrier">
+            <option value="屏障受损（外油内干）">屏障受损（外油内干）</option>
+            <option value="轻度受损">轻度受损</option>
+            <option value="健康">健康</option>
+          </select>
+        </label>
+      </div>
+      <div class="ba-concern-title">当前皮肤困扰（可多选）</div>
+      <div class="sk-concern-row" id="ba-concerns">
+        <label><input type="checkbox" value="闭口粉刺"> 闭口粉刺</label>
+        <label><input type="checkbox" value="炎性痘痘"> 炎性痘痘</label>
+        <label><input type="checkbox" value="陈旧痘印"> 陈旧痘印</label>
+        <label><input type="checkbox" value="两颊泛红"> 两颊泛红</label>
+        <label><input type="checkbox" value="毛孔粗大"> 毛孔粗大</label>
+        <label><input type="checkbox" value="鼻子黑头"> 鼻子黑头</label>
+        <label><input type="checkbox" value="干燥紧绷"> 干燥紧绷</label>
+        <label><input type="checkbox" value="出油旺盛"> 出油旺盛</label>
+      </div>
+      <label>护肤史 / 备注
+        <textarea id="ba-history" rows="2" placeholder="如：曾刷酸，皮肤先变干后转油"></textarea>
+      </label>
+      <label>护肤原则
+        <input type="text" id="ba-note" placeholder="如：护肤做减法、拒绝猛药">
+      </label>
+      <div class="modal-btns">
+        <button class="btn-ghost" id="ba-cancel">取消</button>
+        <button class="btn-main" id="ba-save">💾 保存档案</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="sync-modal">
+    <div class="modal-body card">
+      <div class="card-title">☁️ 云端同步（Supabase） <button class="fav-close" id="sync-close">✕</button></div>
+      <div class="sync-desc">数据默认保存在本机。填写 Supabase 凭证后，即可在多个设备间自动同步；左下角会清晰显示「云端已连接 / 未连接」。</div>
+      <label class="sync-label">Supabase URL</label>
+      <input class="sync-input" id="sync-url" type="text" placeholder="https://xxxx.supabase.co" />
+      <label class="sync-label">anon public key</label>
+      <input class="sync-input" id="sync-key" type="text" placeholder="eyJhbGciOiJIUzI1Ni...（Project API keys → anon public）" />
+      <div class="sync-status" id="sync-status"></div>
+      <div class="sync-err" id="sync-err"></div>
+      <div class="sync-inspect-row">
+        <button class="btn-ghost" id="sync-inspect">📡 检查云端同步</button>
+        <div class="sync-inspect-result" id="sync-inspect-result"></div>
+      </div>
+      <div class="sync-actions">
+        <button class="btn-ghost" id="sync-disconnect">断开连接</button>
+        <button class="btn-ghost" id="sync-now">立即同步</button>
+        <button class="btn-primary" id="sync-save">保存并连接</button>
+      </div>
+      <div class="tts-set">
+        <div class="tts-set-title">🔊 朗读方式（华为等无语音引擎的手机选「云端朗读」）</div>
+        <label class="tts-set-opt"><input type="radio" name="tts_mode" value="auto"> 自动（有引擎用设备，否则云端）</label>
+        <label class="tts-set-opt"><input type="radio" name="tts_mode" value="cloud"> 云端朗读（推荐·无需安装引擎）</label>
+        <label class="tts-set-opt"><input type="radio" name="tts_mode" value="device"> 设备语音（手机自带引擎）</label>
+      </div>
+      <div class="install-set">
+        <div class="tts-set-title">📲 安装到桌面当 App</div>
+        <div class="install-set-tip">想把工作台变成手机桌面全屏图标（真 App）？点下面的按钮，会再次显示安装横幅 / 弹出浏览器的"安装应用"对话框。</div>
+        <button class="btn-ghost" id="install-trigger" style="margin-top:8px;">📲 重新显示安装提示</button>
+      </div>
+      <details class="sync-tip" id="sync-tip-details" open>
+        <summary>💡 首次连接？点此查看建表 SQL 步骤</summary>
+        <div class="sync-tip-body">
+          到 Supabase 后台 <b>→ SQL Editor → New query</b>，粘贴下面这段 → <b>Run</b>：
+          <button class="btn-ghost sync-copy-sql-btn" id="sync-copy-sql" type="button">📋 一键复制建表 SQL</button>
+<pre class="sync-sql"><code>create table if not exists public.yi_sync (
+  key text primary key,
+  value jsonb not null,
+  updated_at timestamptz default now()
+);
+alter table public.yi_sync enable row level security;
+create policy "anon_all" on public.yi_sync for all to anon
+  using (true) with check (true);</code></pre>
+          <div class="sync-sql-hint">建表完成后，回到这里再点一次「保存并连接」即可。所有本地数据会自动推上云端 ✅</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- 划线批注浮窗 -->
+  <div class="rd-anno hidden" id="rd-anno">
+    <button id="rd-anno-mark">✏️ 划线</button>
+    <button id="rd-anno-note">📝 批注</button>
+  </div>
+
+</div>
+<script src="data.js?v=20260730q"></script>
+<script src="data-baoyan.js?v=20260730q"></script>
+<script src="data-bridge.js?v=20260730q"></script>
+<script src="data-bridge2.js?v=20260730q"></script>
+<script src="data-words.js?v=20260730q"></script>
+<script src="data-words2.js?v=20260730q"></script>
+<script src="data-read.js?v=20260730q"></script>
+<script src="data-know.js?v=20260730q"></script>
+<script src="data-beauty-skin.js?v=20260730q"></script>
+<script src="data-ai.js?v=20260730q"></script>
+<script src="data-illus.js?v=20260730q"></script>
+<script src="data-review.js?v=20260730q"></script>
+<script src="data-paper.js?v=20260730q"></script>
+<script src="data-news.js?v=20260730q"></script>
+<script src="data-diet.js?v=20260730q"></script>
+<script src="data-trans.js?v=20260730q"></script>
+<script src="data-ted.js?v=20260730q"></script>
+<script src="data-bridge-adv.js?v=20260730q"></script>
+<script src="app.js?v=20260730q"></script>
+<script src="sync.js?v=20260730q"></script>
+<script>
+/* ============ 注册 service worker（PWA · 离线可用） ============ */
+if("serviceWorker" in navigator){
+  // 注册 Service Worker：网络优先 + 离线兜底，手机端可用且内容每日更新
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").then(function(){ console.log("SW ready"); })
+      .catch(function(err){ console.log("SW register failed", err); });
+  });
+}
+/* ============ 捕获原生安装提示 → 用按钮触发"真 PWA 安装" ============
+   华为 Chrome 的「添加到主屏幕」经常只生成快捷方式，
+   用 beforeinstallprompt 弹出的原生「安装应用」对话框才能得到真独立 App。
+   默认静默：除非浏览器原生支持 + 用户未手动关闭过，否则不弹横幅（避免持续骚扰） */
+let _deferredPrompt=null;
+function _installDismissed(){
+  try{ return localStorage.getItem("yi_install_dismissed")==="1"; }catch(e){ return false; }
+}
+function _markInstallDismissed(){
+  try{ localStorage.setItem("yi_install_dismissed","1"); }catch(e){}
+}
+function _showInstallBanner(){
+  if(_installDismissed()) return;
+  var b=document.getElementById("install-banner");
+  if(b) b.classList.remove("hidden");
+}
+function _hideInstallBanner(){
+  var b=document.getElementById("install-banner");
+  if(b) b.classList.add("hidden");
+}
+window.addEventListener("beforeinstallprompt", function(e){
+  // 仅在浏览器原生支持 + 用户未关闭过时显示
+  e.preventDefault();
+  _deferredPrompt=e;
+  _showInstallBanner();
+});
+window.addEventListener("appinstalled", function(){
+  _hideInstallBanner();
+  _markInstallDismissed();
+  _deferredPrompt=null;
+});
+function doInstall(){
+  var b=document.getElementById("install-banner");
+  if(!_deferredPrompt){
+    // 浏览器没给原生提示：华为浏览器的常见情况，给手动指引
+    if(b){
+      b.querySelector(".install-tip").textContent="浏览器未提供安装入口。建议：①点浏览器 ⋮ 菜单→ 找「安装应用」（不是「添加到主屏幕」）；②若没有该选项，改用 Microsoft Edge 浏览器打开本页再装。";
+      b.querySelector(".install-btn").textContent="好";
+    }
+    return;
+  }
+  _deferredPrompt.prompt();
+  _deferredPrompt.userChoice.then(function(){
+    _deferredPrompt=null;
+    _hideInstallBanner();
+    _markInstallDismissed();
+  });
+}
+window.doInstall=doInstall;
+if(document.getElementById("install-btn")){
+  document.getElementById("install-btn").onclick=doInstall;
+}
+/* 关闭按钮 = 标记为不再弹 */
+if(document.getElementById("install-close")){
+  document.getElementById("install-close").onclick=function(){
+    _hideInstallBanner();
+    _markInstallDismissed();
+  };
+}
+/* 提供给设置弹窗"手动安装"按钮用 */
+function openInstallBanner(){
+  // 重置关闭状态，强制显示
+  try{ localStorage.removeItem("yi_install_dismissed"); }catch(e){}
+  _showInstallBanner();
+  if(!_deferredPrompt && document.getElementById("install-banner")){
+    var b=document.getElementById("install-banner");
+    b.querySelector(".install-tip").textContent="点「安装」即可触发浏览器原生安装（如未弹出，请检查浏览器版本或换 Microsoft Edge）。";
+    b.querySelector(".install-btn").textContent="安装";
+  }
+}
+window.openInstallBanner=openInstallBanner;
+/* 设置弹窗里的"重新显示安装提示"按钮 */
+if(document.getElementById("install-trigger")){
+  document.getElementById("install-trigger").onclick=function(){
+    if(typeof openInstallBanner==="function") openInstallBanner();
+  };
+}
+</script>
+</body>
+</html>
