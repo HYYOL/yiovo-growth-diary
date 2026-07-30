@@ -172,8 +172,8 @@ body{
 .card-grad{ background:var(--grad2); box-shadow:var(--shadow); }
 .hero h1{ font-size:26px; color:#28618d; letter-spacing:1px; font-weight:800; }
 .hero-title-stack{ line-height:1.05; margin-bottom:4px; }
-.hero-title-main{ font-family:"Pacifico","ZCOOL KuaiLe",cursive; font-size:46px; font-weight:400; color:#28618d; letter-spacing:1px; background:linear-gradient(120deg,#4a9fd8,#7ec3f0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-.hero-title-sub{ font-family:"Ma Shan Zheng","ZCOOL KuaiLe",cursive; font-size:38px; color:#3c7bab; font-weight:400; letter-spacing:2px; opacity:1; margin-top:2px; }
+.hero-title-main{ font-family:"HarmonyOS Sans","PingFang SC","Microsoft YaHei",sans-serif; font-size:46px; font-weight:400; color:#28618d; letter-spacing:1px; background:linear-gradient(120deg,#4a9fd8,#7ec3f0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.hero-title-sub{ font-family:"Ma Shan Zheng","KaiTi","STKaiti","楷体",serif; font-size:38px; color:#3c7bab; font-weight:400; letter-spacing:2px; opacity:1; margin-top:2px; }
 .slogan{ margin-top:8px; font-size:14px; color:#3c7bab; font-weight:500; }
 .hero-sub{ margin-top:8px; font-size:12px; color:#5b91b8; }
 .hero-deco{ position:absolute; right:16px; top:14px; font-size:28px; opacity:.9; animation:float 3.4s ease-in-out infinite; }
