@@ -3,7 +3,7 @@
   "short_name": "成长日记",
   "description": "Yiiovo 的个人学习工作台 · 桥梁保研 · 成长记录 · 饭团陪伴",
   "id": "yiovo-growth-diary",
-    "start_url": "./index.html?v=20260730r",
+    "start_url": "./index.html?v=20260730s",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
